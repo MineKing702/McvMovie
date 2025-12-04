@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace McvMovie.Migrations
 {
-    [DbContext(typeof(McvMovieContext))]
+    [DbContext(typeof(MvcMovieContext))]
     partial class McvMovieContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

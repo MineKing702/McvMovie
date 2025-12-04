@@ -1,14 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using McvMovie.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using McvMovie.Data;
+using MvcMovie.Models;
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<McvMovieContext>(options =>
+builder.Services.AddDbContext<MvcMovieContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("McvMovieContext") ?? throw new InvalidOperationException("Connection string 'McvMovieContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -19,11 +27,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",
